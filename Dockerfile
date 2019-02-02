@@ -3,7 +3,7 @@ FROM debian
 MAINTAINER Cleber Silva
 
 RUN apt-get update
-RUN apt-get install -y nginx wget
+RUN apt-get install -y nginx wget vim
 
 RUN apt install -y apt-transport-https lsb-release ca-certificates
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
