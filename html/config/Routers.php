@@ -1,19 +1,29 @@
 <?php
+
+
+$url_not_found = '/login';
+
 $router = new Router();
-$router->get('/foo', 
-    function() { echo "GET WW  foo\n"; }
+
+$router->get($url_not_found, function() {
+    echo "Pagina de login: <input type='password' />";
+    
+});
+
+
+$router->autenticar(false, 
+    function() use ($router){                
+        $router->get('/users', "UserController@index");
+        $router->get('/user/{id}', "UserController@view");
+        $router->delete('/user/{id}', "UserController@delete");
+        $router->put('/user/{id}', "UserController@put");
+        $router->post('/user', "UserController@post");         
+    }, $url_not_found
 );
 
-$router->get('/users', "UserController@index");
-$router->get('/user', "UserController@view");
-
-$router->put('/user', "UserController@update");
-$router->delete('/user', "UserController@delete");
+$router->dispatcher(); 
 
 
-$router->post('/bar', 
-    function() { echo "POST bar RRRRRR\n"; }
-);
 
 
-$router->dispatcher();
+

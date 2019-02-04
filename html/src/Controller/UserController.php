@@ -1,29 +1,41 @@
 <?php
+use Model\Usuario;
 
 class UserController{
-
+    protected $class = 'Model\Usuario';
     public function index(){
-        $users = [
-            ['name' => 'name 01', 'id' => 1],
-            ['name' => 'name 02', 'id' => 2],
-            ['name' => 'name 03', 'id' => 3],
-            ['name' => 'name 04', 'id' => 4],
-            ['name' => 'name 05', 'id' => 5],
-        ];
-        echo json_encode($users);
+        $retorno = new $this->class();        
+        echo $retorno->findAll();
+    }
+
+    public function view($request){                
+        $retorno = new $this->class();        
+        echo json_encode($retorno->findOne($request['id'])->dados);
+    }
+
+    public function post($request){               
+        $dados = json_decode($request['request'],true);        
+        $novo = new $this->class($dados);
+        $novo->save();        
+        return $novo->id;
     }
 
 
-    public function view(){
-        echo "Chamando view()";
+    public function put($request){        
+        $retorno = new $this->class();     
+        $objeto = $retorno->findOne($request['id'])->dados;
+        $dados = json_decode($request['request'],true);
+        foreach($dados as $key => $value){
+            $objeto[$key] = $value;            
+        }
+        $novo = new $this->class($objeto);
+        $novo->save();        
+        return true;
     }
 
-    public function update(){
-        echo "Chamando update()";
-    }
-
-    public function delete(){
-        echo "Chamando delete()";
+    public function delete($request){
+        $model = new $this->class();
+        $model->destroy($request['id']);                    
     }
 
 }

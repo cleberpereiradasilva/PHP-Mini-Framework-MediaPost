@@ -2,19 +2,17 @@
 class Autoload{
     
     public function __construct(){        
-        $this->src = "src" . DIRECTORY_SEPARATOR;
+        $this->src = "../html" . DIRECTORY_SEPARATOR;
         spl_autoload_register(function ($class) {                              
-            $class = str_replace('\\','/', $class);
-            echo $class.'<br>';
+            $class = str_replace('\\','/', $class);            
             if (file_exists($this->src . $class .'.php')) {                  
-                require $this->src . $class .'.php';
+                require_once($this->src . $class .'.php');
                 return true;
             }else{
                 foreach($this->diretorios($this->src) as $diretorio){                                    
-                    $file = $diretorio . $class.'.php';                
-                    echo $file."<br>";
-                    if (file_exists($file)) {                    
-                        require $file;
+                    $file = $diretorio . $class.'.php';                                    
+                    if (file_exists($file)) {                                            
+                        require_once($file);
                         return true;
                     }
                 }     
