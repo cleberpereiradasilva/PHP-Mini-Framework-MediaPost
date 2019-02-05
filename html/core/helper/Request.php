@@ -2,9 +2,23 @@
 namespace core\helper;
 
 class Request{        
-    static public function request(){
+    protected $request = [];
+    public function __construct(){
         $data = file_get_contents('php://input');  
-        print_r($data);
-        return $data;
+        $json = json_decode($data);
+        $post = $_POST;
+        $get = $_GET;
+
+        
+        $this->request = [
+            'body' => $data,
+            'json' => $json,
+            'post' => $post,
+            'get' => $get            
+        ];
+    }
+
+    public function request($index){
+        return $this->request[$index];
     }
 }

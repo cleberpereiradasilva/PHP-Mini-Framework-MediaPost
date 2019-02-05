@@ -1,11 +1,16 @@
 <?php
 namespace core;
+use core\helper\Env;
+use Model\Usuario;
 
 class Auth{
     static function authentication($data){
-       //....
+       $dados = $data->request('post');
+       $dados['senha'] = crypt($dados['senha'], Env::env('HASH'));
+       $user = (new Usuario())->where(['email' => $dados['usuario'], 'senha' =>  $dados['senha']]);
+       print_r($dados);
     }
-    static function is_autenticated($parans = []){        
+    static function is_authenticated($parans = []){        
         //pode-se usar qualquer regra para validar
         $_SESSION["usuario"] = [
             'name' => 'User Name',

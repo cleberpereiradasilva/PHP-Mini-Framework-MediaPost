@@ -63,9 +63,9 @@
 - Os `Controllers` devem extender de `Controller` usando o namespace `core\Controller`.
 - Os `Controller` já herdam os métodos de `CRUD` de `core\Controller`, podendo ser substituido.
     * No caso de substituir algum método lembrar de olhar o método original em `core\Controller` 
-- Importante setar o atributo `protected $class` com o nome do modelo que o controller representa.
+- Importante setar o atributo `protected $class` com o nome do `Model` que o `controller` representa.
     * Ex: `protected $class = 'Model\Usuario';`
-- Exemplo de `Controller`
+- Exemplo de `Controller`:
     ```
     use Model\Usuario;
     use core\Controller;
@@ -84,7 +84,7 @@
     * Enviando uma funcção anônima:
         ```
             $router->get('/end-point', function() {   
-                echo ';    
+                echo 'Hello';    
             });
         ```
 - Os `end-points` podem receber variáveis para enviar para os métodos:
@@ -107,16 +107,16 @@
         $router->dispatcher(); 
     ```
 ### Autenticação
-* Ainda fazendo....
+- Quase pronta, precisa tratar o erro quando falha o login ou senha
 
 
 ### Protegendo as Rotas
 - As rotas também podem receber um terceiro parâmetro, um `array()`.
-- Esse parâmetro será enviado para um método `is_autenticated` em `core\Auth`.
+- Esse parâmetro será enviado para um método `is_authenticated` em `core\Auth`.
 - Nesse método pode-se fazer as regras para a autenticação.
 - Exemplo de implementação apenas para ilustrar:
     ```
-        static function is_autenticated($parans = []){        
+        static function is_authenticated($parans = []){        
             //pode-se usar qualquer regra para validar
             $_SESSION["usuario"] = [
                 'name' => 'User Name',

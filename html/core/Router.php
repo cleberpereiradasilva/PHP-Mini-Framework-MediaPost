@@ -33,19 +33,22 @@ class Router {
         return $this;
     }
 
-    function delete($pattern, $handler, $auth = null) {       
-        $this->routes['delete'][$pattern] = $handler;
+    function delete($pattern, $handler, $auth = null) {              
+        $this->routes['delete'][$pattern]['action'] = $handler;
+        $this->routes['delete'][$pattern]['auth'] = $auth;        
         return $this;
     }
 
-    function put($pattern, $handler, $auth = null) {       
-        $this->routes['put'][$pattern] = $handler;
+    function put($pattern, $handler, $auth = null) {               
+        $this->routes['put'][$pattern]['action'] = $handler;
+        $this->routes['put'][$pattern]['auth'] = $auth;        
         return $this;
     }
 
 
-    function post($pattern, $handler, $auth = null) {
-        $this->routes['post'][$pattern] = $handler;
+    function post($pattern, $handler, $auth = null) {        
+        $this->routes['post'][$pattern]['action'] = $handler;
+        $this->routes['post'][$pattern]['auth'] = $auth;        
         return $this;
     }
 
@@ -82,8 +85,7 @@ class Router {
     }
 
 
-    function autenticar($dados, $f){        
-        echo $dados."<hr />";
+    function autenticar($dados, $f){                
         if($dados){            
             return $f($dados);
         }else{
@@ -109,19 +111,18 @@ class Router {
         
         
         foreach ($this->routes[$method] as $pattern => $node) {   
-            if($path === '/auth'){
-                Request::request();
-                #$data = file_get_contents('php://input');  
-                #Auth::autentication($data);
+            if($path === '/auth'){                                
+                Auth::authentication(new Request());
                 die;
             }
             
-
+          
+           
             $retorno = $this->match($pattern,$path);
             $handler = $node['action'];
             $auth = $node['auth'];
             if ($retorno !== false) {                      
-                if(Auth::is_autenticated($auth) !== true){
+                if(Auth::is_authenticated($auth) !== true){
                     #ACESSO NEGADO...                            
                     header('Location: '. $this->url_login);
                     die;
@@ -134,6 +135,7 @@ class Router {
                         return $handler();
                     }                    
                 }else{
+                    
                     #TEM QUE SER UM CONTROLLER                    
                     $className = explode("@", $handler)[0];
                     $methodName = explode("@", $handler)[1];
@@ -148,7 +150,7 @@ class Router {
                     }else{                       
                         if($method == 'post'){                            
                             $data = file_get_contents('php://input');                                                        
-                            return $class->$methodName(['request' => $data]);
+                            return $class->$methodName(new Request());
                         }
                         return $class->$methodName();
                     }                     

@@ -7,7 +7,7 @@ class Model{
     protected $db = null;
     protected $table = '';
     protected $fields_default = [
-            ['id','int', '', 'PRIMARY KEY AUTOINCREMENT NOT NULL']
+            ['id','int', '', ' PRIMARY KEY AUTOINCREMENT NOT NULL']
     ]; // para todos os Models
     public $dados = [];
     protected $fields = [];
@@ -87,9 +87,27 @@ class Model{
         return $this->db->prepare($stmt_all)->query();        
     }
 
-    public function where($str){
-        echo "Resultado de busca por where<br>";
-        return $this;
+    public function where($str){       
+        
+        $stmt = 'SELECT ';
+        foreach($this->dados as $key => $value){                            
+                $stmt .= $key . ",";                                           
+        }
+        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table() . ' where ';
+
+        foreach($str as $item => $valor){
+            $stmt_all .= " " . $item ."='" . $valor ."' and";
+        }
+
+        
+
+        echo rtrim($stmt_all, " and")."<br>";
+
+        $dados = $this->db->prepare(rtrim($stmt_all, " and"))->query(); 
+        $className = get_called_class();
+        
+        $model = new $className(json_decode($dados,true)[0]);                
+        return $model;
     }
 
     private function insert(){
@@ -103,6 +121,7 @@ class Model{
         }
         $stmt_final = rtrim($stmt, ','). ") values (" . 
             rtrim($values, ',') . ");";                                   
+        echo $stmt_final."<br>";
         $res = $this->db->insert($stmt_final);
         $this->dados['id']=$res;
     }
@@ -119,21 +138,21 @@ class Model{
         $this->db->execute();        
     }
    
-    public function save(){
+    public function save(){        
         $errorMessage = [];
         foreach($this->get_fields() as $field){
             if(strpos($field[3] , 'NOT NULL') !== false && $this->dados[$field[0]] === '' && $field[0] !== 'id' ){
                 $errorMessage[] = ['message' =>  $field[0] . " is required"];                
             }
         }
-        if(count($errorMessage) > 0){
+        if(count($errorMessage) > 0){                        
             return ['error' => true, 'errors' => $errorMessage];
         }else{
             if($this->dados['id'] != ''){
                 //UPDATE               
                 $this->update();
             }else{
-                //INSERT
+                //INSERT                
                 $this->insert();
             }
             

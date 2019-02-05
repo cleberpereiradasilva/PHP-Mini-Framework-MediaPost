@@ -29,8 +29,10 @@ class SQLite implements DB{
         return $this;
     }   
     public function execute() {                
-        $retorno =  $this->pdo->exec($this->stmt) 
-            or die(print_r($this->pdo->errorInfo(), true));            
+       
+
+        $retorno =  $this->pdo->exec($this->stmt);
+                    
         return $retorno;
     }   
 
@@ -91,7 +93,7 @@ class SQLite implements DB{
         echo 'Adicionando `'. $field[0] . '`...' . PHP_EOL;
         $sql_smt = "ALTER TABLE " .  $table . " ADD ". $field[0] ." ". 
             $this->types[$field[1]]
-            ."(".$field[2].") ".$field[3]." ";           
+            ."".$field[2]." ".$field[3]." ";           
         $this->prepare($sql_smt);
         $this->execute();
     }
@@ -102,8 +104,10 @@ class SQLite implements DB{
         foreach($fields as $field){
             $cols.= $field[0].',';
         } 
-        $this->prepare('PRAGMA foreign_keys = OFF;BEGIN TRANSACTION;');
-        $this->execute();        
+        #$this->prepare('PRAGMA foreign_keys = OFF;BEGIN TRANSACTION;');
+        #$this->execute();                
+        $this->drop_table($table."___temp");
+
         $sql_smt = "CREATE TABLE ".$table."___temp AS SELECT ". rtrim($cols,',') ." FROM ". $table;                    
         $this->prepare($sql_smt);
         $this->execute();
@@ -113,8 +117,8 @@ class SQLite implements DB{
         $this->prepare( "ALTER TABLE ".$table."___temp RENAME TO " . $table);        
         $this->execute();
       
-        $this->prepare('PRAGMA foreign_keys = ON;COMMIT;');
-        $this->execute();  
+        #$this->prepare('PRAGMA foreign_keys = ON;COMMIT;');
+        #$this->execute();  
 
     }
 
@@ -146,7 +150,7 @@ class SQLite implements DB{
     }
 
     public function drop_table($table){
-        $sql_smt = "DROP TABLE " .  $table;          
+        $sql_smt = "DROP TABLE IF EXISTS " .  $table;          
         echo $sql_smt. PHP_EOL;
         $this->prepare($sql_smt);
         $this->execute();

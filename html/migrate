@@ -1,6 +1,7 @@
 <?php
-
 require_once("core/Autoload.php");
+
+
 
 
 //varrer os models e criar ou alterar as tabelas de acordo 
