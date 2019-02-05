@@ -1,5 +1,6 @@
 <?php
 use core\helper\Request;
+use core\Auth;
 
 class Router {    
 
@@ -121,7 +122,7 @@ class Router {
             $auth = $node['auth'];
             if ($retorno !== false) {                      
                 if(Auth::is_autenticated($auth) !== true){
-                    #ACESSO NEGADO...                    
+                    #ACESSO NEGADO...                            
                     header('Location: '. $this->url_login);
                     die;
                 }

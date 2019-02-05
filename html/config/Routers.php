@@ -1,10 +1,5 @@
 <?php
-
-
-
-
 $router = new Router();
-
 $router->get('/login', function() {
     $_SESSION["user"] = true;
     echo '
@@ -18,10 +13,11 @@ $router->get('/login', function() {
 });
 
 $router->get('/users', "UserController@index");
-$router->get('/user/{id}', "UserController@view",[false]);
+$router->get('/user/{id}', "UserController@view",['grupo_id' => 11]);
 $router->delete('/user/{id}', "UserController@delete");
 $router->put('/user/{id}', "UserController@put");
 $router->post('/user', "UserController@post");         
+
     
 $router->dispatcher(); 
 

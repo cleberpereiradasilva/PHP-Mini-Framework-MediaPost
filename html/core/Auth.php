@@ -1,22 +1,28 @@
 <?php
+namespace core;
 
 class Auth{
-    static function autentication($data){
-        print_r($data);
+    static function authentication($data){
+       //....
     }
-    static function is_autenticated($parans = []){
-        if(isset($_SESSION["user"])){
-            echo $_SESSION["user"]."<hr />";
+    static function is_autenticated($parans = []){        
+        //pode-se usar qualquer regra para validar
+        $_SESSION["usuario"] = [
+            'name' => 'User Name',
+            'user_id' => 1,
+            'grupo_id' => 10
+        ];
+        print_r($_SESSION["usuario"]['name']);
+        echo "<hr />";
+        
+
+        if(!is_array($parans)){
+            return true;
         }
 
-        $auth = $parans[0];
-        if (is_bool($auth) && $auth !== true){
-            return false;
-            die;
-        }
-        if( is_callable($auth)){           
-            return $auth();
+        if(in_array($parans['grupo_id'], $_SESSION["user"]['grupo_id'])){
+            return true;
         }        
-        return true;
+        return false;
     }
 }
