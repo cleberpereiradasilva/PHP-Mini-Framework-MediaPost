@@ -1,6 +1,6 @@
-### PHP Mini-Framework
+# PHP Mini-Framework
 
-## Criação de um "mini-framework"
+### Criação de um "mini-framework"
 
 - Crie um sistema de roteamento para mapear URLs para uma classe/método ("controller")
 - Todas as requisições devem passar por um arquivo único;
@@ -8,19 +8,19 @@
 - Crie o autoloading de seu sistema sem utilizar o composer ou outra biblioteca pronta.
 
 
-## Configure um ambiente para rodar seu sistema com:
+### Configure um ambiente para rodar seu sistema com:
 - Qualquer distribuição Linux;
 - Um servidor web de sua escolha (de preferência nginx);
 - Banco de dados MySQL/MariaDB;
 - PHP 7.2+.(inicialmente fiz com o sqlite apenas para desenvolver...)
 
-## Lives do desenvolvimento:
+### Lives do desenvolvimento:
 
 - https://www.twitch.tv/collections/hTye8WEwgBXx0g
 
+----
 
-
-## Models    
+### Models    
 - Os Models ficam em `src\Model` e devem extender de `Model`
 - Os atributos são determinados em um campo `protected $fields = []`
 - Cada atributo já é setado com os detalhes para o banco de dados:
