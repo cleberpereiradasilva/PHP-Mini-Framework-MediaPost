@@ -21,7 +21,7 @@
 
 
 ## Models    
-- Os Models ficam em `src\Model` e devem extender de Model
+- Os Models ficam em `src\Model` e devem extender de `Model`
 - Os atributos são determinados em um campo `protected $fields = []`
 - Cada atributo já é setado com os detalhes para o banco de dados:
     ```['email','varchar', '(150)', 'NOT NULL']```
