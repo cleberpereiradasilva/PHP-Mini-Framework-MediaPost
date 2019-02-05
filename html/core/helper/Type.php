@@ -1,6 +1,5 @@
 <?php
 namespace core\helper;
-use \PDO;
 
 class Type{    
     protected $type = [];

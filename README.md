@@ -19,6 +19,27 @@
     - https://www.twitch.tv/collections/hTye8WEwgBXx0g
 
 
+
+## Models    
+    - Os Models ficam em `src\Model` e devem extender de Model
+    - Os atributos são determinados em um campo `protected $fields = []`
+    - Cada atributo já é setado com os detalhes para o banco de dados:
+        ```
+            ['email','varchar', '(150)', 'NOT NULL']
+        ```
+    - Sempre com os 4 campos na matriz respectivamente `nome do campo, tipo, tamanho e demais informações como por exemplo ```DEFAULT(1)``` ou ```NOT NULL```.
+
+    - Tipos de dados
+        - Os tipos de dados suportados até o momento são:
+            - ```int```
+            - ```varchar```
+            - ```datetime```
+            - ```real```
+    - Para inserir novos tipo de dados deve-se editar a classe ```core\helper\Type```, lembrando que isso afeta todos os modelos de banco de dados contidos em ```core\database\```.
+
+
+
+
 ## ToDo
     - [ ] Fazer o sistema de Autenticação.
     - [ ] Terminar a proteção das rotas por autenticação.

@@ -1,5 +1,5 @@
 <?php
-
+use core\helper\Request;
 
 class Router {    
 
@@ -12,9 +12,9 @@ class Router {
 
     
     private $url_not_found = '/';
+    private $url_login = '/login';
 
-    private function urlNotFound($path){
-        header('Location: '. $url_not_found);
+    private function urlNotFound($path){        
         echo 'Path not found `<i>'.$path.'</i>`';
         return false;
     }
@@ -25,31 +25,25 @@ class Router {
     }
 
 
-    function autenticar($dados, $f, $url_not_found){
-        $this->url_not_found = $url_not_found;
-        if($dados){            
-            return $f();
-        }
-    }
-
-
-    function get($pattern, $handler) {       
-        $this->routes['get'][$pattern] = $handler;
+    function get($pattern, $handler, $auth = null) {       
+        $this->routes['get'][$pattern]['action'] = $handler;
+        $this->routes['get'][$pattern]['auth'] = $auth;        
+        
         return $this;
     }
 
-    function delete($pattern, $handler) {       
+    function delete($pattern, $handler, $auth = null) {       
         $this->routes['delete'][$pattern] = $handler;
         return $this;
     }
 
-    function put($pattern, $handler) {       
+    function put($pattern, $handler, $auth = null) {       
         $this->routes['put'][$pattern] = $handler;
         return $this;
     }
 
 
-    function post($pattern, $handler) {
+    function post($pattern, $handler, $auth = null) {
         $this->routes['post'][$pattern] = $handler;
         return $this;
     }
@@ -86,6 +80,21 @@ class Router {
         
     }
 
+
+    function autenticar($dados, $f){        
+        echo $dados."<hr />";
+        if($dados){            
+            return $f($dados);
+        }else{
+            header('Location: /login');
+            echo "Redirecionar /login<br />";
+        }
+
+    }
+
+
+   
+
     function dispatcher() {
         $path = strtok($_SERVER["REQUEST_URI"],'?');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
@@ -94,10 +103,29 @@ class Router {
             return $this->methodNotFound($method);                       
             
         }
+
+
         
-        foreach ($this->routes[$method] as $pattern => $handler) {      
+        
+        foreach ($this->routes[$method] as $pattern => $node) {   
+            if($path === '/auth'){
+                Request::request();
+                #$data = file_get_contents('php://input');  
+                #Auth::autentication($data);
+                die;
+            }
+            
+
             $retorno = $this->match($pattern,$path);
-            if ($retorno !== false) { 
+            $handler = $node['action'];
+            $auth = $node['auth'];
+            if ($retorno !== false) {                      
+                if(Auth::is_autenticated($auth) !== true){
+                    #ACESSO NEGADO...                    
+                    header('Location: '. $this->url_login);
+                    die;
+                }
+
                 if(is_callable($handler)){
                     if(is_array($retorno)){
                         return $handler($retorno);

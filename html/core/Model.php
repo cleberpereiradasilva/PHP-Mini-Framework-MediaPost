@@ -1,6 +1,6 @@
 <?php
 namespace core;
-use core\SQLite;
+use core\database\SQLite;
 
 
 class Model{ 

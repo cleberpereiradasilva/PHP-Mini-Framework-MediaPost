@@ -13,20 +13,9 @@ class Usuario extends Model{
         ['cidade','varchar', '(150)', ''],      
         ['idade','int', '', '']
     ];
-
-    
+        
     public function __construct($dados = null){
         parent::__construct($dados);
     }
-
-    
-
-   
-    public function ola(){
-        print_r($this->get_fields);
-    }
-
-
-    
 
 }

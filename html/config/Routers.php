@@ -1,26 +1,28 @@
 <?php
 
 
-$url_not_found = '/login';
+
 
 $router = new Router();
 
-$router->get($url_not_found, function() {
-    echo "Pagina de login: <input type='password' />";
-    
+$router->get('/login', function() {
+    $_SESSION["user"] = true;
+    echo '
+        Pagina de login <br>
+        <form action="/auth" method="POST">
+        Email: <input type="text" name="usuario" /><br />
+        Email: <input type="password" name="senha" /><br />
+        <input type="submit" value="logar">
+        </form>
+    ';    
 });
 
-
-$router->autenticar(false, 
-    function() use ($router){                
-        $router->get('/users', "UserController@index");
-        $router->get('/user/{id}', "UserController@view");
-        $router->delete('/user/{id}', "UserController@delete");
-        $router->put('/user/{id}', "UserController@put");
-        $router->post('/user', "UserController@post");         
-    }, $url_not_found
-);
-
+$router->get('/users', "UserController@index");
+$router->get('/user/{id}', "UserController@view",[false]);
+$router->delete('/user/{id}', "UserController@delete");
+$router->put('/user/{id}', "UserController@put");
+$router->post('/user', "UserController@post");         
+    
 $router->dispatcher(); 
 
 

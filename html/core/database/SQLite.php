@@ -1,6 +1,6 @@
 <?php
 namespace core;
-use core\helper\Type;
+use core\helper\database\Type;
 
 
 class SQLite implements DB{
