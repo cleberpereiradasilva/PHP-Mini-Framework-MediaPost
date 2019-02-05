@@ -5,7 +5,7 @@ class Auth{
         print_r($data);
     }
     static function is_autenticated($parans = []){
-        if($_SESSION["user"]){
+        if(isset($_SESSION["user"])){
             echo $_SESSION["user"]."<hr />";
         }
 

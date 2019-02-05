@@ -21,7 +21,7 @@
 ----
 
 ### Models    
-- Os Models ficam em `src\Model` e devem extender de `Model`
+- Os Models ficam em `src\Model` e devem extender de `Model` usando o namespace `core\Model`
 - Os atributos são determinados em um campo `protected $fields = []`
 - Cada atributo já é setado com os detalhes para o banco de dados:
     ```['email','varchar', '(150)', 'NOT NULL']```
@@ -30,7 +30,6 @@
 * ``` tipo ``` 
 * ``` tamanho ```
 * ``` demais informações ``` como por exemplo ``` DEFAULT(1) ``` ou ``` NOT NULL ```.
-
 - Tipos de dados
 - Os tipos de dados suportados até o momento são:
 - ```int``` numérico
@@ -40,6 +39,11 @@
 - Para inserir novos tipo de dados deve-se editar a classe ```core\helper\Type``` 
 - Importante saber que isso afeta todos os modelos de banco de dados contidos em ```core\database\```.
 
+### Controllers
+-Os `Controllers` devem ficar dentro de `src\Controller`, ou o `autoload` não vai encontra-los.
+-Os `Controllers` devem extender de `Controller` usando o namespace `core\Controller`.
+-Os `Controller` já erdam os métodos de `CRUD` de `core\Controller`, podendo ser substituido.
+    *No caso de substituir algum método lembrar de olhar o método original em `core\Controller` 
 
 ## ToDo
 - [ ] Fazer o sistema de Autenticação.

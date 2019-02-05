@@ -1,5 +1,5 @@
 <?php
-namespace core\helper;
+namespace core\database;
 
 class Type{    
     protected $type = [];

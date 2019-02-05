@@ -1,6 +1,6 @@
 <?php
-namespace core;
-use core\helper\database\Type;
+namespace core\database;
+use core\database\Type;
 
 interface DB{
 
