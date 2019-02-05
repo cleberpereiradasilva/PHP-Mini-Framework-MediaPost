@@ -61,7 +61,7 @@
 ### Controllers
 - Os `Controllers` devem ficar dentro de `src\Controller`, ou o `autoload` não vai encontra-los.
 - Os `Controllers` devem extender de `Controller` usando o namespace `core\Controller`.
-- Os `Controller` já erdam os métodos de `CRUD` de `core\Controller`, podendo ser substituido.
+- Os `Controller` já herdam os métodos de `CRUD` de `core\Controller`, podendo ser substituido.
     * No caso de substituir algum método lembrar de olhar o método original em `core\Controller` 
 - Importante setar o atributo `protected $class` com o nome do modelo que o controller representa.
     * Ex: `protected $class = 'Model\Usuario';`
