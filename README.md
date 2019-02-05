@@ -42,8 +42,8 @@
 
 
 ## ToDo
--[ ] Fazer o sistema de Autenticação.
--[x] Terminar a proteção das rotas por autenticação.
--[ ] Fazer os Models entender os relacionamentos.
--[ ] Fazer os métodos para exibir conteúdos(view)
--[ ] Fazer a classe do MySql
+- [ ] Fazer o sistema de Autenticação.
+- [x] Terminar a proteção das rotas por autenticação.
+- [ ] Fazer os Models entender os relacionamentos.
+- [ ] Fazer os métodos para exibir conteúdos(view)
+- [ ] Fazer a classe do MySql
