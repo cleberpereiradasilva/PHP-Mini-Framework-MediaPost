@@ -34,8 +34,8 @@ class Controller{
     }
 
     public function delete($request){
-        $model = new $this->class();
-        $model->destroy($request['id']);                    
+        $model = new $this->class();        
+        return $model->destroy($request['id']) * 1;
     }
 
 }

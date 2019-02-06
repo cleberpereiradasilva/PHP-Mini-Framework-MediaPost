@@ -53,7 +53,6 @@ class Router {
     }
 
     private function match($patern, $path){
-
         if($patern === $path){
             return true;
         }
@@ -85,19 +84,6 @@ class Router {
     }
 
 
-    function autenticar($dados, $f){                
-        if($dados){            
-            return $f($dados);
-        }else{
-            header('Location: /login');
-            echo "Redirecionar /login<br />";
-        }
-
-    }
-
-
-   
-
     function dispatcher() {
         $path = strtok($_SERVER["REQUEST_URI"],'?');
         $method = strtolower($_SERVER['REQUEST_METHOD']);
@@ -123,7 +109,8 @@ class Router {
             $auth = $node['auth'];
             if ($retorno !== false) {                      
                 if(Auth::is_authenticated($auth) !== true){
-                    #ACESSO NEGADO...                            
+                    #ACESSO NEGADO...   
+                    
                     header('Location: '. $this->url_login);
                     die;
                 }

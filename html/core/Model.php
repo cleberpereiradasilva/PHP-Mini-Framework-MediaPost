@@ -59,7 +59,8 @@ class Model{
 
     public function destroy($id){
         $stmt_delete = 'DELETE FROM  '. $this->get_table() . ' WHERE id='. (1 * $id);                
-        return $this->db->prepare($stmt_delete)->execute();   
+        $retorno = $this->db->prepare($stmt_delete)->execute();        
+        return $retorno;
     }   
 
 
@@ -98,15 +99,11 @@ class Model{
         foreach($str as $item => $valor){
             $stmt_all .= " " . $item ."='" . $valor ."' and";
         }
-
         
-
-        echo rtrim($stmt_all, " and")."<br>";
-
         $dados = $this->db->prepare(rtrim($stmt_all, " and"))->query(); 
-        $className = get_called_class();
+        $className = get_called_class();       
+        $model = new $className(json_decode($dados,true)[0]);                        
         
-        $model = new $className(json_decode($dados,true)[0]);                
         return $model;
     }
 

@@ -107,8 +107,16 @@
         $router->dispatcher(); 
     ```
 ### Autenticação
-- Quase pronta, precisa tratar o erro quando falha o login ou senha
+- Enviar formulário de autenticação contendo `username` e `password`.
+- Método `POST` para `/auth`.
+- Essa rota está fixa(`hard code`) no arquivo de rotas `core\Router.php`.
+- Case queria usar `json` para enviar os dados, basta editar o método `Auth::authentication`.
+    * Editar a linha `$dados = $data->request('post');` para `$dados = $data->request('json');`.
+- Uma vez autenticado o sistema vai criar uma sessão chamada `$_SESSION['user']`, que pode ser usada em quelquer parte do sistema.
 
+### Logout
+- Pode ser feito acessando via `GET` a url `/logout`.
+- Essa rota pode ser alterada no arquivo de rotas(`Routers.php`).
 
 ### Protegendo as Rotas
 - As rotas também podem receber um terceiro parâmetro, um `array()`.
@@ -116,7 +124,7 @@
 - Nesse método pode-se fazer as regras para a autenticação.
 - Exemplo de implementação apenas para ilustrar:
     ```
-        static function is_authenticated($parans = []){        
+        static function is_authenticated($params = []){        
             //pode-se usar qualquer regra para validar
             $_SESSION["usuario"] = [
                 'name' => 'User Name',
@@ -127,12 +135,12 @@
             echo "<hr />";
             
             //se não for um array válido então nem tem proteção
-            if(!is_array($parans)){
+            if(!is_array($params)){
                 return true;
             }
 
             //verifica se o usurio tem o grupo necessário...
-            if(in_array($parans['grupo_id'], $_SESSION["user"]['grupo_id'])){
+            if(in_array($params['grupo_id'], $_SESSION["user"]['grupo_id'])){
                 return true;
             }        
             return false;
@@ -142,8 +150,9 @@
 
 
 ## ToDo
-- [ ] Fazer o sistema de Autenticação.
+- [x] Fazer o sistema de Autenticação.
+- [x] Fazer o logout.
 - [x] Terminar a proteção das rotas por autenticação.
 - [ ] Fazer os Models entender os relacionamentos.
-- [ ] Fazer os métodos para exibir conteúdos(view)
-- [ ] Fazer a classe do MySql
+- [ ] Fazer os métodos para exibir conteúdos(view).
+- [ ] Fazer a classe do MySql.

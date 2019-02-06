@@ -2,7 +2,6 @@
 namespace core\database;
 use core\database\Type;
 
-
 class SQLite implements DB{
     private $types;
     public function __construct($config = ['database' => 'sqlite.db']) {    
@@ -59,8 +58,7 @@ class SQLite implements DB{
             );
         $retorno = [];
         foreach($cols as $col){
-            $part = explode("as ","as ". trim($col));
-            
+            $part = explode("as ","as ". trim($col));            
             $retorno[] = end($part);
         }
         return $retorno;
@@ -82,8 +80,7 @@ class SQLite implements DB{
         foreach($fields as $field){
             $cols.= '' . $field[0].' '.$this->types[$field[1]].' ' .$field[2]. ' '.$field[3].',';
         } 
-        $sql_smt = "CREATE TABLE IF NOT EXISTS " .  $table . "(". rtrim($cols,',') .")";            
-        echo $sql_smt;
+        $sql_smt = "CREATE TABLE IF NOT EXISTS " .  $table . "(". rtrim($cols,',') .")";                    
         $this->prepare($sql_smt);
         $this->execute();
     }
@@ -103,9 +100,7 @@ class SQLite implements DB{
         $cols = '';        
         foreach($fields as $field){
             $cols.= $field[0].',';
-        } 
-        #$this->prepare('PRAGMA foreign_keys = OFF;BEGIN TRANSACTION;');
-        #$this->execute();                
+        }                  
         $this->drop_table($table."___temp");
 
         $sql_smt = "CREATE TABLE ".$table."___temp AS SELECT ". rtrim($cols,',') ." FROM ". $table;                    
@@ -113,12 +108,9 @@ class SQLite implements DB{
         $this->execute();
         $this->drop_table($table);
         $this->execute();
-
         $this->prepare( "ALTER TABLE ".$table."___temp RENAME TO " . $table);        
-        $this->execute();
-      
-        #$this->prepare('PRAGMA foreign_keys = ON;COMMIT;');
-        #$this->execute();  
+        $this->execute();      
+        
 
     }
 
@@ -150,11 +142,9 @@ class SQLite implements DB{
     }
 
     public function drop_table($table){
-        $sql_smt = "DROP TABLE IF EXISTS " .  $table;          
-        echo $sql_smt. PHP_EOL;
+        $sql_smt = "DROP TABLE IF EXISTS " .  $table;                  
         $this->prepare($sql_smt);
         $this->execute();
     }
-
 
 }
