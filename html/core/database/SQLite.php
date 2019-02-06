@@ -106,7 +106,9 @@ class SQLite implements DB{
         }                  
         $this->drop_table($table."___temp");
 
-        $sql_smt = "CREATE TABLE ".$table."___temp AS SELECT ". rtrim($cols,',') ." FROM ". $table;                    
+        $this->create_table($fields, $table."___temp");
+
+        $sql_smt = "INSERT INTO ".$table."___temp AS SELECT ". rtrim($cols,',') ." FROM ". $table;                    
         $this->prepare($sql_smt);
         $this->execute();
         $this->drop_table($table);

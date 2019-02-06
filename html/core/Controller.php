@@ -1,24 +1,26 @@
 <?php
 namespace core;
 
+
 class Controller{
     protected $class = null;
 
     public function index(){
         $retorno = new $this->class();        
-        echo $retorno->findAll();
+        return $retorno->findAll();
     }
 
-    public function view($request){                
+    public function view($request){          
         $retorno = new $this->class();        
-        echo json_encode($retorno->findOne($request['id'])->dados);
+        $retorno->findOne($request['id']);        
+        return $retorno;
     }   
     
     public function post($request){                       
         $dados = $request->request('post');
         $novo = new $this->class($dados);
-        $novo->save();        
-        return $novo->id;
+        $novo->save();                        
+        return $novo;
     }
 
     public function put($request){        
@@ -29,8 +31,8 @@ class Controller{
             $objeto[$key] = $value;            
         }
         $novo = new $this->class($objeto);
-        $novo->save();        
-        return true;
+        $novo->save();
+        return $novo;
     }
 
     public function delete($request){        

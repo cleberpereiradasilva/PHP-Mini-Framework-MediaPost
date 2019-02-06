@@ -7,7 +7,7 @@ class User extends Model{
         ['name','varchar', '(150)', 'NOT NULL'],        
         ['username','varchar', '(150)', 'UNIQUE'],
         ['password','varchar', '(150)', 'NOT NULL'],
-        ['grupo_id','int', '', 'NULL']
+        ['group_id','int', '', 'NULL', 'UserGroup']
     ];  
 
     public function __construct($dados = null){

@@ -22,7 +22,7 @@ $router->get('/login', function() {
         <form action="/user" method="POST">
         Nome: <input type="text" name="name" /><br />
         Username: <input type="text" name="username" /><br />
-        Grupo: <input type="text" name="grupo_id" /><br />
+        Grupo: <input type="text" name="group_id" /><br />
         Senha: <input type="password" name="password" /><br />
         <input type="submit" value="logar">
         </form>
@@ -60,6 +60,26 @@ $router->get('/group/{id}', "UserGroupController@view");
 $router->get('/group/delete/{id}', "UserGroupController@delete");
 $router->put('/group/{id}', "UserGroupController@put");
 $router->post('/group', "UserGroupController@post");    
+
+
+
+$router->get('/role/create', function() {    
+    echo '
+        Pagina de cadastro <br>
+        <form action="/role" method="POST">
+        Nome: <input type="text" name="name" /><br />
+        <input type="submit" value="inserir">
+        </form>
+        <hr />        
+    ';    
+});
+
+
+$router->get('/roles', "PermissaoController@index");
+$router->get('/role/{id}', "PermissaoController@view");
+$router->get('/role/delete/{id}', "PermissaoController@delete");
+$router->put('/role/{id}', "PermissaoController@put");
+$router->post('/role', "PermissaoController@post");   
 
 
 $router->dispatcher(); 

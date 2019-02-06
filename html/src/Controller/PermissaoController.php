@@ -1,30 +1,27 @@
 <?php
-use Model\User;
+use Model\Permissao;
 use core\Controller;
 use core\helper\Env;
 use core\helper\Response;
 
-class UserController extends Controller{
-    protected $class = 'Model\User';  
+class PermissaoController extends Controller{
+    protected $class = 'Model\Permissao';  
 
     public function index(){        
         $retorno = new $this->class();        
-        $users = $retorno->findAll();
-        return Response::json(['users' => $users]);
+        $objects = $retorno->findAll();
+        return Response::json(['items' => $objects]);
     }
 
     public function view($request){          
         $user = parent::view($request);
-        return Response::view('user-detail', ['user' => $user]);
+        return Response::json(['item' => $user]);
         
     }   
 
     public function post($request){
-        $dados = $request->request('post');
-        $dados['password'] = $hash = crypt($dados['password'], Env::env('HASH'));
-        $novo = new $this->class($dados);
-        $novo->save();
-        header('Location: /users');
+        $item = parent::post($request);
+        header('Location: /roles');
     }
 
     public function delete($request){

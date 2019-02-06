@@ -18,6 +18,12 @@
 - https://www.twitch.tv/collections/hTye8WEwgBXx0g
 
 ----
+----
+
+### Convensões
+* Todas os `models` devem ficar dentro de `src\Model`.
+* Todas os `controllers` devem ficar dentro de `src\Controller`.
+* Todas as classes devem começa com maiúscula nom nome da classe e no nome do arquivo.
 
 ### Models    
 - Os Models ficam em `src\Model` e devem extender de `Model` usando o namespace `core\Model`
@@ -31,10 +37,10 @@
 * ``` demais informações ``` como por exemplo ``` DEFAULT(1) ``` ou ``` NOT NULL ```.
 - Tipos de dados
 - Os tipos de dados suportados até o momento são:
-- ```int``` numérico
-- ```varchar``` texto
-- ```datetime``` data e hora
-- ```real``` número com casa decimais
+* ```int``` numérico
+* ```varchar``` texto
+* ```datetime``` data e hora
+* ```real``` número com casa decimais
 - Para inserir novos tipo de dados deve-se editar a classe ```core\helper\Type``` 
 - Importante saber que isso afeta todos os modelos de banco de dados contidos em ```core\database\```.
 - Não é preciso setar a chave primária, ela será integrada automaticamente.
@@ -91,7 +97,7 @@
     ```
         $router->delete('/end-point/{id}', "NameController@method");
     ```
-- Exemplo de um arquivo de rotas:
+- Exemplo de um arquivo de rotas(`config\Routers.php`):
     ```
         $router = new Router();
         $router->get('/home', function() {
@@ -147,12 +153,140 @@
         }
     ```
 
+### Views
+- O `include` das `views` pode ser feito usando o `core\helpers\Response`.
+- Através do método `view($path, Array())`.
+- O primeiro parametro é o caminho do arquivo da `view` que deve estar por padrão dentro do diretório `Views`
+- O sergundo parametro é um `Array` contendo a lista de variáveis que deseja passar para a `view`.
+- Exemplo de implementação em um `Controller`:
+    ```
+        use Model\User;
+        use core\Controller;        
+        use core\helper\Response;
+
+        class UserController extends Controller{
+            protected $class = 'Model\User';  
+
+            public function index(){        
+                $retorno = new $this->class();        
+                $users = $retorno->findAll();
+                //espera que exista o arquivo src\View\user-list.php
+                return Response::view('user-list', ['users' => $users]);
+            }
+    ```
+- Também está disponível o método `json($vars)` para enviar um conteúdo em `json`.
+- Exemplo de retorno usando o `json($vars)`:
+    ```
+        use Model\User;
+        use core\Controller;        
+        use core\helper\Response;
+
+        class UserController extends Controller{
+            protected $class = 'Model\User';  
+
+            public function index(){        
+                $retorno = new $this->class();        
+                $users = $retorno->findAll();                
+                return Response::json(['users' => $users]);
+            }
+    ```
+- Retorno do `json`:
+    ```
+        {
+            "users":[
+                {"dados":{"id":"1","name":"Cleber","username":"admin"}},
+                {"dados":{"id":"2","name":"cleber010","username":"admin11"}},
+                {"dados":{"id":"3","name":"Another Cleber","username":"another"}}
+                {"dados":{"id":"4","name":"asdfadsf","username":"asdfasdf"}},
+                {"dados":{"id":"5","name":"asdfasdf","username":"dddd"}}
+            ]
+        }
+    ```
+
+### Relacionamento [!!! precisa melhorar !!!]
+- OneToMany 
+    * Pode ser setado na hora de indicar os `fields` do `Model`, apenas indicado o outro `Model` relacionado.
+        - Exemplo:
+            ```
+                protected $fields = [
+                    ['name','varchar', '(150)', 'NOT NULL'],        
+                    ['username','varchar', '(150)', 'UNIQUE'],
+                    ['password','varchar', '(150)', 'NOT NULL'],
+                    ['group_id','int', '', 'NULL', 'UserGroup']
+                ];  
+            ```
+        - A referência seria `$user->group` para o objeto ou aos seus atributos `$user->group->name` por exemplo.
+- ManyToMany
+    * Neste tipo de relacionameto precisamos setar um método dentro do `Model`.
+    * Esse método vai indicar os dados do relacionamento.
+    * Por exemplo:
+        ```
+            public function permissoes(){
+                return [            
+                    'models' => ['GrupoPermissao', 'Permissao'],
+                    'fields' => ['group_id', 'permissao_id']
+                ];
+            }
+        ```
+        - Onde `models` indica o caminho do relacionamento. 
+            * Nesse caso passa por `Model\GrupoPermissao` e depois em `Model\Permissao`
+            * Sempre vai retornar a lista do último(`Model\Permissao`)
+        - Onde `fields` indica o atributo de cada `Model` respectivamente.
+    * Importante dizer que o `Model` que servirá apenas como a ponte entre os dois outros não precisa de controller.
+    * Exemplo completo de relacionamenteo ManyToManay:
+        ```
+            uses ....
+            class UserGroup extends Model{        
+                protected $fields = [
+                    ['name','varchar', '(150)', 'UNIQUE NOT NULL']
+                ];  
+                public function __construct($dados = null){
+                    parent::__construct($dados);
+                }
+                //UserGroup tem permissoes...
+                public function permissoes(){
+                    return [            
+                        'models' => ['GrupoPermissao', 'Permissao'],
+                        'fields' => ['group_id', 'permissao_id']
+                    ];
+                }
+            }
+
+            uses ....
+            class GrupoPermissao extends Model{                    
+                protected $fields = [
+                    ['group_id','int', '', 'NOT NULL', 'UserGroup'],
+                    ['permissao_id','int', '', 'NOT NULL', 'Permissao']
+                ];  
+                public function __construct($dados = null){
+                    parent::__construct($dados);
+                }
+            }
+
+            uses ...
+            class Permissao extends Model{                    
+                protected $fields = [
+                    ['name','varchar', '(150)', 'NOT NULL']
+                ];  
+                public function __construct($dados = null){
+                    parent::__construct($dados);
+                }
+            }
+
+
+            //depois pode ser acessado a lista das permissoes assim:
+            ...setar o $grupo 
+            $grupo->permissoes
+            //outro exemplo partindo do seu usuario
+            $user->group->name
+        ```
 
 
 ## ToDo
 - [x] Fazer o sistema de Autenticação.
 - [x] Fazer o logout.
 - [x] Terminar a proteção das rotas por autenticação.
-- [ ] Fazer os Models entender os relacionamentos.
-- [ ] Fazer os métodos para exibir conteúdos(view).
+- [x] Fazer as `views` (uma forma de carregar as páginas e receber as `vars`).
+- [x] Fazer os Models entender os relacionamentos(hasHone).
+- [x] Fazer os Models entender os relacionamentos(hasMany).
 - [ ] Fazer a classe do MySql.
