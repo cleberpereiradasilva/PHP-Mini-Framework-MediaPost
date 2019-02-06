@@ -21,7 +21,8 @@ $router->get('/login', function() {
 
         <form action="/user" method="POST">
         Nome: <input type="text" name="name" /><br />
-        Email: <input type="text" name="username" /><br />
+        Username: <input type="text" name="username" /><br />
+        Grupo: <input type="text" name="grupo_id" /><br />
         Senha: <input type="password" name="password" /><br />
         <input type="submit" value="logar">
         </form>
@@ -36,11 +37,29 @@ $router->get('/login', function() {
     ';    
 });
 
+
+$router->get('/group-new', function() {    
+    echo '
+        Pagina de cadastro <br>
+        <form action="/group" method="POST">
+        Nome: <input type="text" name="name" /><br />        
+        <input type="submit" value="enviar">
+        </form>
+        <hr />             
+    ';    
+});
+
 $router->get('/users', "UserController@index");
 $router->get('/user/{id}', "UserController@view");
 $router->get('/user/delete/{id}', "UserController@delete");
 $router->put('/user/{id}', "UserController@put");
-$router->post('/user', "UserController@post");         
+$router->post('/user', "UserController@post");    
+
+$router->get('/groups', "UserGroupController@index");
+$router->get('/group/{id}', "UserGroupController@view");
+$router->get('/group/delete/{id}', "UserGroupController@delete");
+$router->put('/group/{id}', "UserGroupController@put");
+$router->post('/group', "UserGroupController@post");    
 
 
 $router->dispatcher(); 

@@ -125,7 +125,7 @@ class Router {
                     
                     #TEM QUE SER UM CONTROLLER                    
                     $className = explode("@", $handler)[0];
-                    $methodName = explode("@", $handler)[1];
+                    $methodName = explode("@", $handler)[1];                    
                     require_once('src/Controller/'. $className . '.php');
                     $class = new $className();
                     if(is_array($retorno)){

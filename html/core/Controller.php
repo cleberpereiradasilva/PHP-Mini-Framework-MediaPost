@@ -12,10 +12,10 @@ class Controller{
     public function view($request){                
         $retorno = new $this->class();        
         echo json_encode($retorno->findOne($request['id'])->dados);
-    }
-
-    public function post($request){               
-        $dados = json_decode($request['request'],true);        
+    }   
+    
+    public function post($request){                       
+        $dados = $request->request('post');
         $novo = new $this->class($dados);
         $novo->save();        
         return $novo->id;
@@ -33,9 +33,10 @@ class Controller{
         return true;
     }
 
-    public function delete($request){
-        $model = new $this->class();        
-        return $model->destroy($request['id']) * 1;
+    public function delete($request){        
+        $model = new $this->class();    
+        $retorno = $model->destroy($request['id']);            
+        return ($retorno * 1);
     }
 
 }

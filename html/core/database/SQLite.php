@@ -27,25 +27,28 @@ class SQLite implements DB{
         $this->stmt = $stmt;
         return $this;
     }   
-    public function execute() {                
-       
-
-        $retorno =  $this->pdo->exec($this->stmt);
-                    
-        return $retorno;
+    public function execute() {        
+        $result =  $this->pdo->exec($this->stmt);            
+        return $result;
     }   
 
-    public function query() {        
-        $result = $this->pdo->query($this->stmt);        
-        $tables = [];
-        while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
-            $linha = [];
-            foreach($this->cols() as $col){                
-                $linha[$col] = $row[$col];
+    public function query() {          
+            $result = $this->pdo->query($this->stmt);        
+            if(!$result){
+                echo "Erro ao executar a query:<br>";
+                echo $this->stmt."<br>";
+
             }
-            $tables[] = $linha;
-        }        
-        return json_encode($tables);
+            $tables = [];
+            while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+                $linha = [];
+                foreach($this->cols() as $col){                
+                    $linha[$col] = $row[$col];
+                }
+                $tables[] = $linha;
+            }        
+            return json_encode($tables);               
+        
     }   
 
 
@@ -137,8 +140,7 @@ class SQLite implements DB{
         }           
         if($remove){
             $this->remove_field($fields, $table);
-        }
-        
+        }        
     }
 
     public function drop_table($table){

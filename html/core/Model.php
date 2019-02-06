@@ -12,19 +12,20 @@ class Model{
     public $dados = [];
     protected $fields = [];
 
-    public function __construct($dados = null){    
+    public function __construct($dados = null){            
+       
         //seta todos os campos com valor ''
-        foreach($this->get_fields() as $item){       
+        foreach($this->get_fields() as $item){                   
             $this->dados[$item[0]] = '';
-        }         
-        
+        }  
         //se recebeu dados ja salva o stado do objeto
         if($dados){
             foreach($dados as $key => $value){                       
+                echo $key."<br>";
                 $this->dados[$key] = $value;
             }
         }
-
+       
         $get_called_class = explode('\\', get_called_class());
         $this->table = strtolower(end($get_called_class));                 
         $this->db = new SQLite();                
@@ -33,38 +34,7 @@ class Model{
 
     public function get_fields(){
         return  array_merge($this->fields_default, $this->fields);
-    }
-
-
-    public function create_table(){                
-        $this->db->create_table($this->get_fields(), $this->get_table());
-        $this->db->update_table($this->get_fields(), $this->get_table());        
-        return true;        
-    }
-
-    public function drop_table(){
-        $this->db->drop_table($this->get_table());               
-        return true;        
-    }    
-
-    public function get_table(){
-        return $this->table;
-    }
-
-
-    public function first(){
-        echo "Trazendo o primeiro registro<br>";
-        return $this;
-    }
-
-    public function destroy($id){
-        $stmt_delete = 'DELETE FROM  '. $this->get_table() . ' WHERE id='. (1 * $id);                
-        $retorno = $this->db->prepare($stmt_delete)->execute();        
-        return $retorno;
-    }   
-
-
-     
+    }       
 
     public function findOne($id){
         $stmt = 'SELECT ';
@@ -84,7 +54,7 @@ class Model{
         foreach($this->dados as $key => $value){                            
                 $stmt .= $key . ",";                                           
         }
-        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table();
+        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table();        
         return $this->db->prepare($stmt_all)->query();        
     }
 
@@ -102,23 +72,43 @@ class Model{
         
         $dados = $this->db->prepare(rtrim($stmt_all, " and"))->query(); 
         $className = get_called_class();       
-        $model = new $className(json_decode($dados,true)[0]);                        
-        
+        $model = new $className(json_decode($dados,true)[0]);                                
         return $model;
     }
 
+
+
+    public function create_table(){                
+        $this->db->create_table($this->get_fields(), $this->get_table());
+        $this->db->update_table($this->get_fields(), $this->get_table());        
+        return true;        
+    }
+
+    public function drop_table(){
+        $this->db->drop_table($this->get_table());               
+        return true;        
+    }    
+
+    public function get_table(){
+        return $this->table;
+    }
+
+
+
     private function insert(){
+        
         $stmt='INSERT INTO '.$this->get_table().' (';
-        $values = '';
+        $values = '';        
+       
         foreach($this->dados as $key => $value){                
-            if($key !== 'id'){
+            if($key !== 'id'){                
                 $stmt .= $key . ",";
                 $values .= "'" . $value . "',";                
             }
         }
         $stmt_final = rtrim($stmt, ','). ") values (" . 
             rtrim($values, ',') . ");";                                   
-        echo $stmt_final."<br>";
+       
         $res = $this->db->insert($stmt_final);
         $this->dados['id']=$res;
     }
@@ -135,7 +125,8 @@ class Model{
         $this->db->execute();        
     }
    
-    public function save(){        
+    public function save(){    
+          
         $errorMessage = [];
         foreach($this->get_fields() as $field){
             if(strpos($field[3] , 'NOT NULL') !== false && $this->dados[$field[0]] === '' && $field[0] !== 'id' ){
@@ -156,6 +147,13 @@ class Model{
             return $this->dados;
         }        
     }
+
+
+    public function destroy($id){
+        $stmt_delete = 'DELETE FROM  '. $this->get_table() . ' WHERE id='. (1 * $id);                        
+        $retorno = $this->db->prepare($stmt_delete)->execute();        
+        return $retorno;
+    }  
 
 
 
