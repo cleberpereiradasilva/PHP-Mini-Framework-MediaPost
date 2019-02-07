@@ -1,11 +1,9 @@
 <?php
 $router = new Router();
+use core\helper\Response;
 
 
-
-$router->get('/', function() {    
-    echo "<center> HOME </center>";
-});
+$router->get('/', "HomeController@index");
 
 
 $router->get('/logout', function() {

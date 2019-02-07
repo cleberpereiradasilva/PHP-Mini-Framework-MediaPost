@@ -12,12 +12,12 @@ class UserController extends Controller{
 
         $retorno = new $this->class();        
         $users = $retorno->findAll();
-        return Response::view('user-list', ['users' => $users]);
+        return Response::view('user/list', ['users' => $users]);
     }
 
     public function view($request){          
         $user = parent::view($request);
-        return Response::view('user-detail', ['user' => $user]);
+        return Response::view('user/user', ['user' => $user]);
         
     }   
 

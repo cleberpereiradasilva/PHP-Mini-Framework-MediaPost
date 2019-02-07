@@ -4,6 +4,7 @@ use core\helper\Env;
 use Model\User;
 
 class Auth{
+
     static function authentication($data){
        $dados = $data->request('post');
        $dados['password'] = crypt($dados['password'], Env::env('hash'));       
@@ -25,7 +26,7 @@ class Auth{
         }
         
         if(isset($params['logged'])){               
-            if(isset($_SESSION["user"])){
+            if(is_auth()){
                 return true;
             }else{
                 return false;

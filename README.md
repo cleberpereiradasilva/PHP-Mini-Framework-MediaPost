@@ -292,3 +292,5 @@
 - [x] Fazer a classe do MySql.
 - [x] Colocar as configurações do banco de dados no .env
 - [ ] Fazer uma interface bootstrap
+- [x] Fazer um `functions.php` com funções globais.
+- [ ] Fazer o .gitignore funcionar (rs.....)
