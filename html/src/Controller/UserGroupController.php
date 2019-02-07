@@ -13,7 +13,7 @@ class UserGroupController extends Controller{
 
 
     public function post($request){                       
-        $grupos = parent::post($request);        
+        $grupos = parent::post($request);                
         header('Location: /groups');
     }
 

@@ -1,6 +1,6 @@
 <?php
 namespace core;
-use core\database\SQLite;
+use core\database\MySQL;
 
 
 class Model{ 
@@ -25,7 +25,7 @@ class Model{
         }       
         $get_called_class = explode('\\', get_called_class());        
         $this->table = strtolower(end($get_called_class));                 
-        $this->db = new SQLite();
+        $this->db = new MySQL();
     }        
 
     public function findOne($id){

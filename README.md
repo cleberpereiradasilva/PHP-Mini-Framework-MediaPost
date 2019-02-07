@@ -231,7 +231,7 @@
         - Onde `models` indica o caminho do relacionamento. 
             * Nesse caso passa por `Model\GrupoPermissao` e depois em `Model\Permissao`
             * Sempre vai retornar a lista do último(`Model\Permissao`)
-        - Onde `fields` indica o atributo de cada `Model` respectivamente.
+        - Onde `fields` indica o `id` de cada `Model` respectivamente.
     * Importante dizer que o `Model` que servirá apenas como a ponte entre os dois outros não precisa de controller.
     * Exemplo completo de relacionamenteo ManyToManay:
         ```
@@ -289,4 +289,5 @@
 - [x] Fazer as `views` (uma forma de carregar as páginas e receber as `vars`).
 - [x] Fazer os Models entender os relacionamentos(hasHone).
 - [x] Fazer os Models entender os relacionamentos(hasMany).
-- [ ] Fazer a classe do MySql.
+- [x] Fazer a classe do MySql.
+- [ ] Colocar as configurações do banco de dados no .env

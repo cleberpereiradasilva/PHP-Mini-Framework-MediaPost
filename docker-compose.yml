@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "8080:80"
+    volumes:
+     - ./html:/var/www/html  
+    tty: true
+    networks:
+      - esnet
+  mysqlserver:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '2323'
+      MYSQL_DATABASE: 'minif'
+    volumes:
+      - './base/mysql:/var/lib/mysql'
+    networks:
+      - esnet
+networks:
+  esnet:
+

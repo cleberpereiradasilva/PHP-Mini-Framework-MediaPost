@@ -1,0 +1,13 @@
+
+
+
+Executando migracoes...
+Criando tabela(se nao existir) `grupopermissao`
+CREATE TABLE IF NOT EXISTS grupopermissao(id INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL,group_id INTEGER  NOT NULL,permissao_id INTEGER  NOT NULL)
+Criando tabela(se nao existir) `permissao`
+CREATE TABLE IF NOT EXISTS permissao(id INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL,name VARCHAR (150) NOT NULL)
+Criando tabela(se nao existir) `user`
+CREATE TABLE IF NOT EXISTS user(id INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL,name VARCHAR (150) NOT NULL,username VARCHAR (150) UNIQUE,password VARCHAR (150) NOT NULL,group_id INTEGER  NULL)
+Criando tabela(se nao existir) `usergroup`
+CREATE TABLE IF NOT EXISTS usergroup(id INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL,name VARCHAR (150) UNIQUE NOT NULL)
+

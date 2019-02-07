@@ -13,8 +13,9 @@ foreach(scandir($path) as $model){
     if($model != '.' && $model != '..'){                
         $className = "Model\\" . str_replace(".php", "", $model);        
         $obj = new $className();       
-        $obj->create_table($obj->get_fields(), $obj->get_table());
-    }    
+        $obj->create_table($obj->get_fields(), $obj->get_table());       
+    }  
+      
 }
 
 #TODO fazer uma forma de remover a tabela se o Model for removido...
