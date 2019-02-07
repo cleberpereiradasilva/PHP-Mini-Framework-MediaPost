@@ -7,10 +7,12 @@ use core\helper\Response;
 class UserController extends Controller{
     protected $class = 'Model\User';  
 
-    public function index(){        
+    public function index(){   
+        
+
         $retorno = new $this->class();        
         $users = $retorno->findAll();
-        return Response::json(['users' => $users]);
+        return Response::view('user-list', ['users' => $users]);
     }
 
     public function view($request){          

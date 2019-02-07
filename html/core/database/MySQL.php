@@ -4,10 +4,20 @@ use core\database\Type;
 
 class MySQL implements DB{
     private $types;
-    private $db = 'minif';
-    public function __construct($config = ['database' => 'sqlite.db']) {    
+    private $db_name = "";
+    private $db_server = "";
+    private $db_user = "";
+    private $db_password = "";
+
+    public function __construct($config = []) {   
+        
+        $this->db_name = $config['database_name'];
+        $this->db_server =  $config['database_server'];
+        $this->db_user =  $config['database_user'];
+        $this->db_password =  $config['database_password'];
+
         try {
-           $this->pdo = new \PDO("mysql:dbname=".$this->db.";host=mysqlserver", "root", "2323");               
+           $this->pdo = new \PDO("mysql:dbname=".$this->db_name.";host=".$this->db_server."", "".$this->db_user."", "".$this->db_password."");               
         } catch (\PDOException $e) {            
            print_r($e);
            echo "Erro conectar-se ao banco" . PHP_EOL;           
@@ -112,7 +122,7 @@ class MySQL implements DB{
     public function update_table($fields, $table){    
         $sql_smt = "SELECT COLUMN_NAME as name FROM INFORMATION_SCHEMA.COLUMNS  
             WHERE table_name = '" .$table. "'
-            AND table_schema = '" . $this->db . "'";
+            AND table_schema = '" . $this->db_name . "'";
         $result = $this->pdo->query($sql_smt);        
         $names = [];
         $attributes = ['id'];

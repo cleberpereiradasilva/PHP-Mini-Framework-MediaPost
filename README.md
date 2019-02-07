@@ -290,4 +290,5 @@
 - [x] Fazer os Models entender os relacionamentos(hasHone).
 - [x] Fazer os Models entender os relacionamentos(hasMany).
 - [x] Fazer a classe do MySql.
-- [ ] Colocar as configurações do banco de dados no .env
+- [x] Colocar as configurações do banco de dados no .env
+- [ ] Fazer uma interface bootstrap

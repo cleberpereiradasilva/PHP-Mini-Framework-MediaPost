@@ -49,7 +49,7 @@ $router->get('/group-new', function() {
     ';    
 });
 
-$router->get('/users', "UserController@index");
+$router->get('/users', "UserController@index", ['logged' => true]);
 $router->get('/user/{id}', "UserController@view");
 $router->get('/user/delete/{id}', "UserController@delete");
 $router->put('/user/{id}', "UserController@put");

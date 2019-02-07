@@ -1,7 +1,6 @@
 <?php
 namespace core;
-use core\database\MySQL;
-
+use core\helper\Env;
 
 class Model{ 
     protected $db = null;
@@ -24,8 +23,17 @@ class Model{
             }            
         }       
         $get_called_class = explode('\\', get_called_class());        
-        $this->table = strtolower(end($get_called_class));                 
-        $this->db = new MySQL();
+        $this->table = strtolower(end($get_called_class));  
+        
+        if(Env::env('database_type') == 'mysql'){
+            $dataBaseClass = '\core\database\MySQL';     
+            $config = Env::env('mysql');                       
+        }elseif(Env::env('database_type') == 'sqlite'){
+            $dataBaseClass = '\core\database\SQLite';  
+            $config = ['database' => Env::env('sqlite')['database']];            
+        }
+
+        $this->db = new $dataBaseClass($config);
     }        
 
     public function findOne($id){
@@ -77,7 +85,7 @@ class Model{
             $stmt_all .= " " . $item ."='" . $valor ."' and";
         }
         
-       
+        
         $dado_json = $this->db->prepare(rtrim($stmt_all, " and"))->query();         
         $dados = json_decode($dado_json,true);
         $objects = [];
@@ -85,7 +93,7 @@ class Model{
             $className = get_called_class();                            
            
             $objects[] = new $className($dado);            
-        }
+        }        
         return $objects;
        
     }

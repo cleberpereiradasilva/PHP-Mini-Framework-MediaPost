@@ -1,6 +1,8 @@
 <?php
 namespace Model;
 use core\Model;
+use core\helper\Env;
+
 class User extends Model{    
     //'int','varchar','datetime','real'
     protected $fields = [
