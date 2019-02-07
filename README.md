@@ -24,17 +24,32 @@
 * Todas os `models` devem ficar dentro de `src\Model`.
 * Todas os `controllers` devem ficar dentro de `src\Controller`.
 * Todas as classes devem começa com maiúscula nom nome da classe e no nome do arquivo.
+* Todas funcções que não pertencem à nenhuma classe devem ficar dentro de `src\helper\funcoes.php`.
+
+### Como Rodar
+* Podemos rodar diretamente do `docker-compose` com os comandos:
+    -`docker-compose --build`
+    -`docker-compose up`
+    - Para acessar a máquina:
+        * `docker exec -it  <conteiner_ID>  /bin/bash`.
+        * Os arquivos ficam em `\var\www\html`.
+* Podemos também usar apenas o conteudo da pasta `html/` e hospedar em um servidor.
+    - Vale informar que já existe as configurações para o `nginx` na pasta `nginx/`.
+
+### Config(.env)
+* Os dados como `hash` para a criptografia e dados de conexão com o banco de dados, ficam na raiz da pasta `html/` em um arquivo chamado `.env`.
 
 ### Models    
-- Os Models ficam em `src\Model` e devem extender de `Model` usando o namespace `core\Model`
-- Os atributos são determinados em um campo `protected $fields = []`
+- Os Models ficam em `src\Model` e devem extender de `Model` usando o namespace `core\Model`.
+- Os atributos são determinados em um campo `protected $fields = []`.
 - Cada atributo já é setado com os detalhes para o banco de dados:
     ```['email','varchar', '(150)', 'NOT NULL']```
-- Sempre com os 4 campos na matriz respectivamente
+- Sempre com os 5 campos na matriz respectivamente:
 * ``` nome do campo ```
 * ``` tipo ``` 
 * ``` tamanho ```
 * ``` demais informações ``` como por exemplo ``` DEFAULT(1) ``` ou ``` NOT NULL ```.
+* ``` Modulo de Relacionamento ``` como será explicado em `Relacionamento`, `oneToMany`.
 - Tipos de dados
 - Os tipos de dados suportados até o momento são:
 * ```int``` numérico
@@ -118,7 +133,7 @@
 - Essa rota está fixa(`hard code`) no arquivo de rotas `core\Router.php`.
 - Case queria usar `json` para enviar os dados, basta editar o método `Auth::authentication`.
     * Editar a linha `$dados = $data->request('post');` para `$dados = $data->request('json');`.
-- Uma vez autenticado o sistema vai criar uma sessão chamada `$_SESSION['user']`, que pode ser usada em quelquer parte do sistema.
+- Uma vez autenticado poderá consultar o se o usuário está autenticado com as funções `is_auth()`e `auth_user`, essas funções serão explicadas na sessão Helpers Globais
 
 ### Logout
 - Pode ser feito acessando via `GET` a url `/logout`.
@@ -203,6 +218,11 @@
         }
     ```
 
+### Layout
+- O `layout` está separado em arquivos dentro de `src\View\layout`.
+- O arquivos são `montados` na função `core\helper\Response::view()`.
+- Fica fácil a criação de outras partes como `sides` `bars` e montado em `core\helper\Response::view()`.
+
 ### Relacionamento [!!! precisa melhorar !!!]
 - OneToMany 
     * Pode ser setado na hora de indicar os `fields` do `Model`, apenas indicado o outro `Model` relacionado.
@@ -280,7 +300,21 @@
             //outro exemplo partindo do seu usuario
             $user->group->name
         ```
-
+## Helpers Globais
+- Exitem algumas funções genéricas criadas em `core\helper\funcions.php`.
+- Essas funções estarão disponíveis em todo o sistema.
+- São elas:
+    * `s_auth()` que retorna `true|false` para informar se o usuário está logado.
+    * `auth_user()` que retorna um objeto do tipo `User()` referente ao usuário logado.
+    * `errors()` que retorna um `array` contenos erros quando enviado alguma requisição.
+        - Essa função pode ser usada em qualquer lugar como validação de formulários
+        - Exemplo de verificação de erros:
+            ```
+                <?php foreach(errors() as $erro): ?>
+                    <div class='alert-danger'><?= $erro['message']; ?></div>
+                <?php endforeach ?>
+            ```
+    * Outras mais podem ser criadas dentro do `core\helper\funcions.php`.
 
 ## ToDo
 - [x] Fazer o sistema de Autenticação.
@@ -291,6 +325,7 @@
 - [x] Fazer os Models entender os relacionamentos(hasMany).
 - [x] Fazer a classe do MySql.
 - [x] Colocar as configurações do banco de dados no .env
-- [ ] Fazer uma interface bootstrap
+- [x] Fazer uma interface bootstrap
+- [x] Fazer retorno de erros
 - [x] Fazer um `functions.php` com funções globais.
 - [ ] Fazer o .gitignore funcionar (rs.....)

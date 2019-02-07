@@ -7,10 +7,10 @@ class Auth{
 
     static function authentication($data){
        $dados = $data->request('post');
-       $dados['password'] = crypt($dados['password'], Env::env('hash'));       
+       $dados['password'] = crypt($dados['password'], Env::env('hash'));                     
        $user = (new User())->where(['username' => $dados['username'], 'password' =>  $dados['password']]);       
        if(count($user) == 1){
-            $_SESSION["user"] = $user[0]->dados;
+            $_SESSION["user_id"] = $user[0]->dados['id'];
             header('Location: ' . Env::env('pos_login'));
             die;
        }else{

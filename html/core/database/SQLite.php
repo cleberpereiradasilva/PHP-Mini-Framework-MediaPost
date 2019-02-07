@@ -25,29 +25,23 @@ class SQLite implements DB{
 
     public function prepare($stmt) {        
         $this->stmt = $stmt;
-        return $this;
+        return $this->pdo->prepare($stmt);
     }   
     public function execute() {        
         $result =  $this->pdo->exec($this->stmt);            
         return $result;
     }   
 
-    public function query() {          
-            $result = $this->pdo->query($this->stmt);        
-            if(!$result){
-                echo "Erro ao executar a query:<br>";
-                echo $this->stmt."<br>";
-
+    public function query($prepare = null) {          
+        $tables = [];        
+        foreach($prepare as $row ) {
+            $linha = [];
+            foreach($this->cols() as $col){                
+                $linha[$col] = $row[$col];
             }
-            $tables = [];
-            while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
-                $linha = [];
-                foreach($this->cols() as $col){                
-                    $linha[$col] = $row[$col];
-                }
-                $tables[] = $linha;
-            }        
-            return json_encode($tables);               
+            $tables[] = $linha;
+        }        
+        return json_encode($tables);             
         
     }   
 

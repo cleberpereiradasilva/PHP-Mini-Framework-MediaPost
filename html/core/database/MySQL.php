@@ -18,6 +18,7 @@ class MySQL implements DB{
 
         try {
            $this->pdo = new \PDO("mysql:dbname=".$this->db_name.";host=".$this->db_server."", "".$this->db_user."", "".$this->db_password."");               
+           $this->pdo->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION); 
         } catch (\PDOException $e) {            
            print_r($e);
            echo "Erro conectar-se ao banco" . PHP_EOL;           
@@ -34,34 +35,26 @@ class MySQL implements DB{
         return $this->types;
     }
 
-    public function prepare($stmt) {        
+    public function prepare($stmt) {                
         $this->stmt = $stmt;
-        return $this;
+        return $this->pdo->prepare($stmt);
     }   
-    public function execute() {        
-        $result =  $this->pdo->exec($this->stmt);            
+    public function execute() {                  
+        $result =  $this->pdo->exec($this->stmt);                    
         return $result;
     }   
 
-    public function query() {          
-            $result = $this->pdo->query($this->stmt);        
-            if(!$result){
-                echo "Erro ao executar a query:<br>";
-                echo $this->stmt."<br>";
-
-            }
+    public function query($prepare = null) { 
             $tables = [];
-            while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+            while ($row = $prepare->fetch()) {
                 $linha = [];
                 foreach($this->cols() as $col){                
                     $linha[$col] = $row[$col];
                 }
                 $tables[] = $linha;
             }        
-            return json_encode($tables);               
-        
+            return json_encode($tables); 
     }   
-
 
     public function cols() {
         #TODO ver a forma certa de fazer isso

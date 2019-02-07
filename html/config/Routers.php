@@ -4,36 +4,8 @@ use core\helper\Response;
 
 
 $router->get('/', "HomeController@index");
-
-
-$router->get('/logout', function() {
-    session_unset();
-    session_destroy();
-    header('Location: /');
-});
-
-
-$router->get('/login', function() {    
-    echo '
-        Pagina de cadastro <br>
-
-        <form action="/user" method="POST">
-        Nome: <input type="text" name="name" /><br />
-        Username: <input type="text" name="username" /><br />
-        Grupo: <input type="text" name="group_id" /><br />
-        Senha: <input type="password" name="password" /><br />
-        <input type="submit" value="logar">
-        </form>
-        <hr />
-        Pagina de login <br>
-        
-        <form action="/auth" method="POST">
-        Email: <input type="text" name="username" /><br />
-        Senha: <input type="password" name="password" /><br />
-        <input type="submit" value="logar">
-        </form>
-    ';    
-});
+$router->get('/login', "HomeController@login");
+$router->get('/logout', "HomeController@logout");
 
 
 $router->get('/group-new', function() {    
@@ -47,14 +19,18 @@ $router->get('/group-new', function() {
     ';    
 });
 
-$router->get('/users', "UserController@index", ['logged' => true]);
+$router->get('/users', "UserController@index");
+$router->get('/user/new', "UserController@new");
 $router->get('/user/{id}', "UserController@view");
 $router->get('/user/delete/{id}', "UserController@delete");
+$router->get('/user/edit/{id}', "UserController@edit");
 $router->put('/user/{id}', "UserController@put");
 $router->post('/user', "UserController@post");    
 
 $router->get('/groups', "UserGroupController@index");
+$router->get('/group/new', "UserGroupController@new");
 $router->get('/group/{id}', "UserGroupController@view");
+$router->get('/group/edit/{id}', "UserGroupController@edit");
 $router->get('/group/delete/{id}', "UserGroupController@delete");
 $router->put('/group/{id}', "UserGroupController@put");
 $router->post('/group', "UserGroupController@post");    

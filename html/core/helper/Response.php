@@ -15,6 +15,12 @@ class Response{
         require_once('src/View/layout/bottom.php');
     }
 
+    static function errors($url, $errors){
+        $_SESSION['errors'] = $errors;
+        echo $_SESSION['errors'];
+        header('Location: ' . $url);        
+    }
+
     static function json($vars){
         header('Content-type: application/json');
         echo json_encode($vars);

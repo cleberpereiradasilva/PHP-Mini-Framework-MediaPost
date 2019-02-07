@@ -8,6 +8,17 @@ class HomeController extends Controller{
         return Response::view('');
     }
 
+    public function login(){
+        return Response::view('layout/login');
+    }
+
+
+    public function logout(){
+        session_unset();
+        session_destroy();
+        header('Location: /');
+    }
+
 }
 
 

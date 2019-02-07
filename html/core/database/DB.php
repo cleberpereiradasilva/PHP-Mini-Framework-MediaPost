@@ -8,7 +8,7 @@ interface DB{
     public function get_types();   
     public function prepare($stmt);   
     public function execute();   
-    public function query();       
+    public function query($prepare = null);       
     public function cols();
     
     public function create_table($fields, $table);

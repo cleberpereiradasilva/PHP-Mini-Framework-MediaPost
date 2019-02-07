@@ -23,7 +23,7 @@ class Controller{
         return $novo;
     }
 
-    public function put($request){        
+    public function put($request){            
         $retorno = new $this->class();     
         $objeto = $retorno->findOne($request['id'])->dados;
         $dados = json_decode($request['request'],true);

@@ -36,13 +36,30 @@ class Model{
         $this->db = new $dataBaseClass($config);
     }        
 
-    public function findOne($id){
+    public function fill($dados = null){                    
+        //se recebeu dados ja salva o stado do objeto
+        if($dados){  
+            foreach($dados as $key => $value){                
+                if($key != 'id'){
+                    $this->dados[$key] = $value;
+                }            
+            }
+        }
+    }        
+
+    public function findOne($id){        
+        if($id == ''){
+            return null;
+        }
+        
         $stmt = 'SELECT ';
         foreach($this->dados as $key => $value){                            
                 $stmt .= $key . ",";                                           
         }
-        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table() . ' where id=' . (1 * $id);
-        $dados = $this->db->prepare($stmt_all)->query(); 
+        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table() . ' where id=?';
+        $prepare = $this->db->prepare($stmt_all);                
+        $prepare->execute([$id]);
+        $dados = $this->db->query($prepare);  
         $className = get_called_class();                
         $model = new $className(json_decode($dados,true)[0]);        
         $this->dados = $model->dados;
@@ -56,8 +73,11 @@ class Model{
         foreach($this->dados as $key => $value){                            
                 $stmt .= $key . ",";                                           
         }
-        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table();        
-        $dado_json = $this->db->prepare($stmt_all)->query();        
+        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table();       
+        $prepare = $this->db->prepare($stmt_all);             
+        $prepare->execute();
+        //$dado_json = $prepare->execute(); 
+        $dado_json = $this->db->query($prepare);        
         $dados = json_decode($dado_json,true);
         $objects = [];
         foreach($dados as $dado){
@@ -75,18 +95,21 @@ class Model{
 
     public function where($str){       
         
+       
+
         $stmt = 'SELECT ';
         foreach($this->dados as $key => $value){                            
                 $stmt .= $key . ",";                                           
         }
-        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table() . ' where ';
-
+        $stmt_all = rtrim($stmt, ','). " FROM " . $this->get_table(). ' where ';    
+        $valores = [];
         foreach($str as $item => $valor){
-            $stmt_all .= " " . $item ."='" . $valor ."' and";
-        }
-        
-        
-        $dado_json = $this->db->prepare(rtrim($stmt_all, " and"))->query();         
+            $stmt_all .= " " . $item ."=? and";
+            $valores[] = $valor;
+        }                   
+        $prepare = $this->db->prepare(rtrim($stmt_all, " and"));                    
+        $prepare->execute($valores);
+        $dado_json = $this->db->query($prepare);        
         $dados = json_decode($dado_json,true);
         $objects = [];
         foreach($dados as $dado){
@@ -95,6 +118,9 @@ class Model{
             $objects[] = new $className($dado);            
         }        
         return $objects;
+
+
+
        
     }
 
@@ -137,14 +163,17 @@ class Model{
 
     private function update(){
         $stmt='UPDATE '.$this->get_table().' SET ';        
+        $values = [];
         foreach($this->dados as $key => $value){                
             if($key !== 'id'){
-                $stmt .= $key . " = '" . $value . "',";                        
+                $stmt .= $key . "=?,";                        
+                $values[] = $value;
             }
-        }
-        $stmt_update = rtrim($stmt, ','). " WHERE id = ".$this->dados['id'];        
-        $this->db->prepare($stmt_update);
-        $this->db->execute();        
+        }       
+        $stmt = rtrim($stmt, ',') . " where id=?";          
+        $values[] = $this->dados['id'];        
+        $prepare = $this->db->prepare($stmt);                            
+        $prepare->execute($values);
     }
    
     public function save(){            
@@ -152,13 +181,13 @@ class Model{
         foreach($this->get_fields() as $field){
             if(strpos($field[3] , 'NOT NULL') !== false && $this->dados[$field[0]] === '' && $field[0] !== 'id' ){
                 $errorMessage[] = ['message' =>  $field[0] . " is required"];                
-            }
+            }            
         }
-        if(count($errorMessage) > 0){                        
+        if(count($errorMessage) > 0){      
             return ['error' => true, 'errors' => $errorMessage];
-        }else{
+        }else{            
             if($this->dados['id'] != ''){
-                //UPDATE               
+                //UPDATE                                   
                 $this->update();
             }else{
                 //INSERT                

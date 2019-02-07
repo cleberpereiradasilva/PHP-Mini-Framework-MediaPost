@@ -1,5 +1,5 @@
 <?php
-use core\Auth;
+use Model\User;
 
 function is_auth(){
     if(isset($_SESSION["user_id"])){
@@ -15,4 +15,12 @@ function auth_user(){
         $user = (new User())->findOne($_SESSION["user_id"]);
     }
     return $user;
+}
+
+function errors(){
+    $errors = $_SESSION['errors'];
+    $_SESSION['errors'] = "";
+    if($errors != ""){
+        return $errors;
+    }
 }
