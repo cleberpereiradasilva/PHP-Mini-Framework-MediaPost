@@ -11,7 +11,7 @@
 - Qualquer distribuição Linux;
 - Um servidor web de sua escolha (de preferência nginx);
 - Banco de dados MySQL/MariaDB;
-- PHP 7.2+.(inicialmente fiz com o sqlite apenas para desenvolver...)
+- PHP 7.2+.
 
 ### Lives do desenvolvimento:
 
@@ -20,11 +20,11 @@
 ----
 ----
 
-### Convensões
+### Convenções
 * Todas os `models` devem ficar dentro de `src\Model`.
 * Todas os `controllers` devem ficar dentro de `src\Controller`.
-* Todas as classes devem começa com maiúscula nom nome da classe e no nome do arquivo.
-* Todas funcções que não pertencem à nenhuma classe devem ficar dentro de `src\helper\funcoes.php`.
+* Todas as classes devem começar com maiúscula no nome da classe e no nome do arquivo.
+* Todas funções que não pertencem à nenhuma classe devem ficar dentro de `src\helper\funcoes.php`.
 
 ### Como Rodar
 * Podemos rodar diretamente do `docker-compose` com os comandos:
