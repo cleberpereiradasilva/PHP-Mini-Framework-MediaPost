@@ -329,3 +329,21 @@
 - [x] Fazer retorno de erros
 - [x] Fazer um `functions.php` com funções globais.
 - [ ] Fazer o .gitignore funcionar (rs.....)
+
+
+
+# Comunicação com Sistema[API]
+
+
+
+## Permissões:
+* Local
+    - [ ] Cadastrar usuário;
+    - [ ] Listar usuários;
+
+* Remoto
+    - [ ] Cadastrar listas
+    - [ ] Cadastrar contatos;
+    - [ ] Cadastrar mensagem;
+    - [ ] Enviar mensagem;
+    - [ ] Exibir resultados do envio.

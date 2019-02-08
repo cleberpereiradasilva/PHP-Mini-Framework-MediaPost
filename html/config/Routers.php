@@ -19,6 +19,16 @@ $router->get('/group-new', function() {
     ';    
 });
 
+
+$router->get('/listas', "ListaController@index");
+$router->get('/lista/new', "ListaController@new");
+$router->get('/lista/{id}', "ListaController@view");
+$router->get('/lista/delete/{id}', "ListaController@delete");
+$router->get('/lista/edit/{id}', "ListaController@edit");
+$router->post('/lista', "ListaController@post"); 
+
+
+
 $router->get('/users', "UserController@index");
 $router->get('/user/new', "UserController@new");
 $router->get('/user/{id}', "UserController@view");

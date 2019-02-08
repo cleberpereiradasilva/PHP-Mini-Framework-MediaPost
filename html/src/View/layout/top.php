@@ -27,6 +27,10 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/groups">Grupos</a>
+              </li>   
+
+              <li class="nav-item">
+                <a class="nav-link" href="/listas">Listas de Contatos</a>
               </li>              
             <?php } ?>
         </ul>
